@@ -5,7 +5,7 @@ A Python tool to detect and monitor GitHub repositories related to the Sha1-Hulu
 ## Features
 
 - **Fetch Organization Members**: Automatically retrieve all members from a GitHub organization and save them to CSV
-- **V1 Detection**: Scan for repositories named `Shai-Hulud`
+- **V1 Detection**: Scan for repositories named `   `
 - **V2 Detection**: Scan for repositories with "Sha1-Hulud: The Second Coming." in their description
 - **Slack Notifications**: Send alerts when repositories are detected
 - **Automated Pagination**: Handles large organizations with automatic API pagination
@@ -42,6 +42,7 @@ cp .env.example .env
 Edit `.env` and add your tokens:
 ```
 GITHUB_TOKEN=your_github_token_here
+GITHUB_ORG=your_organization_name
 SLACK_WEBHOOK_URL=your_slack_webhook_url_here
 ```
 
@@ -84,6 +85,21 @@ This will:
   - **V2**: Any repository with "Sha1-Hulud: The Second Coming." in its description
 - Send Slack notifications when repositories are found (if webhook configured)
 
+### Scan Organization Directly (Alternative)
+
+Instead of using a CSV file, you can scan an organization directly using `main_org.py`:
+
+```bash
+python main_org.py
+```
+
+This will:
+- Fetch all members from the organization specified in `GITHUB_ORG` (from `.env`)
+- Scan each member for Sha1-Hulud repositories in real-time
+- Send Slack notifications when repositories are found
+
+**Note**: This requires the `GITHUB_ORG` environment variable to be set in your `.env` file.
+
 ### Using the Run Script
 
 For convenience, use the provided run script:
@@ -104,8 +120,9 @@ GitHub API rate limits:
 
 ```
 .
-├── fetch_org_members.py  # Fetch organization members
-├── main.py               # Main scanner script
+├── fetch_org_members.py  # Fetch organization members to CSV
+├── main.py               # Main scanner (reads from users.csv)
+├── main_org.py          # Alternative scanner (fetches org members directly)
 ├── users.csv            # List of usernames to scan
 ├── requirments.txt      # Python dependencies
 ├── run.sh              # Convenience script
@@ -118,6 +135,7 @@ GitHub API rate limits:
 ### Environment Variables
 
 - `GITHUB_TOKEN` - GitHub Personal Access Token (required for org access)
+- `GITHUB_ORG` - GitHub organization name (required for `main_org.py`)
 - `SLACK_WEBHOOK_URL` - Slack webhook for notifications (optional)
 
 ### CSV Format
